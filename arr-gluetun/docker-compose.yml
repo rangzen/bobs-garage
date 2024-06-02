@@ -16,6 +16,7 @@ services:
       - 8989:8989 # Sonarr (tv)
       - 7878:7878 # Radarr (movies)
       - 9696:9696 # Prowlarr (indexers)
+      - 8080:8080/tcp # go-remote-check (check VPN exit point)
       - 8888:8888/tcp # HTTP Proxy
     volumes:
       - /data/docker/arr-stack:/gluetun
@@ -88,3 +89,10 @@ services:
       - /data/docker/arr-stack/prowlarr/data:/config
     restart: unless-stopped
 
+  go-remote-check:
+    # This container is used to check if the VPN is working
+    # See https://github.com/rangzen/go-remote-check
+    build:
+      context: ../../sources/go-remote-check
+    container_name: go-remote-check
+    network_mode: "service:gluetun"
