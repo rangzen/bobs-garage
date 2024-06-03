@@ -9,6 +9,11 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
+    networks:
+      arr-gluetun_default:
+        # Fixed IP address for the container
+        # All other containers will connect to this IP address
+        ipv4_address: 172.18.0.2
     ports:
       - 6881:6881
       - 6881:6881/udp
@@ -96,3 +101,9 @@ services:
       context: ../../sources/go-remote-check
     container_name: go-remote-check
     network_mode: "service:gluetun"
+
+networks:
+  arr-gluetun_default:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
